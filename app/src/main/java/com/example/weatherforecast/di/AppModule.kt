@@ -1,7 +1,6 @@
 package com.example.weatherforecast.di
 
 import android.content.Context
-import com.example.weatherforecast.utils.MPChartHelp
 import com.example.weatherforecast.utils.Network
 import com.example.weatherforecast.utils.NetworkConnectivity
 import dagger.Module
@@ -26,11 +25,5 @@ class AppModule {
     @Singleton
     fun provideNetworkConnectivity(@ApplicationContext context: Context): NetworkConnectivity {
         return Network(context)
-    }
-
-    @Provides
-    @Singleton
-    fun provideMPChartHelp(): MPChartHelp{
-        return MPChartHelp()
     }
 }

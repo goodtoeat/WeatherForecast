@@ -1,10 +1,15 @@
 package com.example.weatherforecast.data.remote.service
 
-import com.example.weatherforecast.dto.RiverData
+import com.example.weatherforecast.dto.WeatherData
 import retrofit2.Response
 import retrofit2.http.GET
+import retrofit2.http.Query
 
 interface APIService {
-    @GET("per-river/interview?stock_id=2330")
-    suspend fun loadData(): Response<RiverData>
+    @GET("weather")
+    suspend fun getCurrentWeather(
+        @Query("lat") latitude: Double,
+        @Query("lon") longitude: Double,
+        @Query("appid") apiKey: String?
+    ): Response<WeatherData>
 }

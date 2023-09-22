@@ -6,7 +6,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.weatherforecast.data.DataRepositorySource
 import com.example.weatherforecast.data.Resource
-import com.example.weatherforecast.dto.RiverData
+import com.example.weatherforecast.dto.WeatherData
+import com.example.weatherforecast.dto.WeatherRequest
 import com.example.weatherforecast.ui.base.BaseViewModel
 import com.example.weatherforecast.utils.SingleEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,8 +19,8 @@ class MainViewModel @Inject constructor(
     private val dataRepository: DataRepositorySource
 ): BaseViewModel() {
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    private val riverDataPrivate = MutableLiveData<Resource<RiverData>>()
-    val riverData: LiveData<Resource<RiverData>> get() = riverDataPrivate
+    private val weatherDataPrivate = MutableLiveData<Resource<WeatherData>>()
+    val weatherData: LiveData<Resource<WeatherData>> get() = weatherDataPrivate
 
 
     /**
@@ -33,10 +34,10 @@ class MainViewModel @Inject constructor(
     private val showToastPrivate = MutableLiveData<SingleEvent<Any>>()
     val showToast: LiveData<SingleEvent<Any>> get() = showToastPrivate
 
-    open fun getRiverRawData(){
+    open fun getWeatherRawData(){
         viewModelScope.launch {
-            dataRepository.doDataRequest().collect {
-                riverDataPrivate.value = it
+            dataRepository.requestCurrentWeather(WeatherRequest(latitude = 44.34, longitude = 10.99)).collect {
+                weatherDataPrivate.value = it
             }
         }
     }

@@ -83,8 +83,6 @@ dependencies {
     kapt("com.google.dagger:hilt-android-compiler:2.48")
     //gson
     implementation("com.google.code.gson:gson:2.10.1")
-    //MPChart
-    implementation ("com.github.PhilJay:MPAndroidChart:v3.1.0")
 
 
 }

@@ -1,7 +1,8 @@
 package com.example.weatherforecast.data
 
 import com.example.weatherforecast.data.remote.RemoteData
-import com.example.weatherforecast.dto.RiverData
+import com.example.weatherforecast.dto.WeatherData
+import com.example.weatherforecast.dto.WeatherRequest
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
@@ -11,9 +12,8 @@ import kotlin.coroutines.CoroutineContext
 class DataRepository @Inject constructor(private val remoteRepository: RemoteData, private val ioDispatcher: CoroutineContext) :
     DataRepositorySource {
 
-    override suspend fun doDataRequest(): Flow<Resource<RiverData>> {
+    override suspend fun requestCurrentWeather(request: WeatherRequest): Flow<Resource<WeatherData>> {
         return flow {
-            emit(remoteRepository.requestData())
-        }.flowOn(ioDispatcher)
-    }
+            emit(remoteRepository.requestCurrentWeather(request))
+        }.flowOn(ioDispatcher)    }
 }

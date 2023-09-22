@@ -2,7 +2,8 @@ package com.example.weatherforecast.data.remote
 
 import com.example.weatherforecast.data.Resource
 import com.example.weatherforecast.data.remote.service.APIService
-import com.example.weatherforecast.dto.RiverData
+import com.example.weatherforecast.dto.WeatherData
+import com.example.weatherforecast.dto.WeatherRequest
 import com.example.weatherforecast.error.NETWORK_ERROR
 import com.example.weatherforecast.error.NO_INTERNET_CONNECTION
 import com.example.weatherforecast.utils.NetworkConnectivity
@@ -14,10 +15,13 @@ import javax.inject.Inject
 class RemoteData @Inject
 constructor(private val serviceGenerator: ServiceGenerator, private val networkConnectivity: NetworkConnectivity) :
     RemoteDataSource {
-    override suspend fun requestData(): Resource<RiverData> {
+    override suspend fun requestCurrentWeather(
+        request: WeatherRequest): Resource<WeatherData> {
         val dataService = serviceGenerator.createService(APIService::class.java)
-        return when (val response = processCall(dataService::loadData)) {
-            is RiverData -> {
+        return when (val response = processCall {
+            dataService.getCurrentWeather(
+                request.latitude, request.longitude, request.apiKey) }) {
+            is WeatherData -> {
                 Resource.Success(data = response)
             }
             else -> {

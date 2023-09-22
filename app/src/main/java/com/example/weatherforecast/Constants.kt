@@ -1,4 +1,4 @@
 package com.example.weatherforecast
 
-const val BASE_URL = "https://api.nstock.tw/v2/"
+const val BASE_URL = "https://api.openweathermap.org/data/2.5/"
 
