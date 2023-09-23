@@ -20,8 +20,10 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
@@ -64,10 +66,10 @@ fun DailyItem(forecast: Forecast){
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Text(text = getDate(forecast.dt.toLong()),
                 style = MaterialTheme.typography.body2,
-                color = MaterialTheme.colors.onSecondary)
+                color = TransparentGrayDark)
             Text(text = getWeek(forecast.dt.toLong()),
                 style = MaterialTheme.typography.body2,
-                color = MaterialTheme.colors.onSecondary)
+                color = TransparentGrayDark)
         }
 
         Spacer(
@@ -76,7 +78,7 @@ fun DailyItem(forecast: Forecast){
 
         Text(
             modifier = Modifier.width(25.dp),
-            text = "${removeFloat(forecast.pop * 100)}%",
+            text = "${removeFloat(forecast.pop * 100)} %",
             style = MaterialTheme.typography.caption,
             color = TransparentGrayDark,
             textAlign = TextAlign.End
@@ -94,15 +96,15 @@ fun DailyItem(forecast: Forecast){
         Text(
             modifier = Modifier.weight(1f),
             text = forecast.weather[0].description,
-            style = MaterialTheme.typography.body2,
+            style = MaterialTheme.typography.body2.copy(fontSize = 15.sp),
             color = TransparentGrayDark,
             textAlign = TextAlign.Center
         )
 
 
 
-        Text(text = "${removeFloat(forecast.main.temp_max)}°C / ${removeFloat(forecast.main.temp_min)}°C",
-            style = MaterialTheme.typography.body2,
+        Text(text = "${removeFloat(forecast.main.temp_min)}°C - ${removeFloat(forecast.main.temp_max)}°C",
+            style = MaterialTheme.typography.body2.copy(fontWeight = FontWeight.W500),
             color = TransparentGrayDark,
         )
     }

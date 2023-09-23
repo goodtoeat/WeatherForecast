@@ -52,7 +52,7 @@ val Typography = Typography(
     ),
     body2 = TextStyle(
         fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.W400,
+        fontWeight = FontWeight.W500,
         fontSize = 12.sp,
         lineHeight = 18.sp
     ),

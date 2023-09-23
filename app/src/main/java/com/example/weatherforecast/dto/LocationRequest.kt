@@ -1,6 +1,6 @@
 package com.example.weatherforecast.dto
 
-data class WeatherRequest(val latitude: Double,
+data class LocationRequest(val latitude: Double,
                            val longitude: Double,
                            val units: String = "metric",
                            val lang: String = "zh_tw",
