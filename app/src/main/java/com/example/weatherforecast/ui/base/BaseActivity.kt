@@ -6,11 +6,11 @@ import androidx.appcompat.app.AppCompatActivity
 abstract class BaseActivity : AppCompatActivity() {
 
     abstract fun observeViewModel()
-    protected abstract fun initViewBinding()
+//    protected abstract fun initViewBinding()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        initViewBinding()
+//        initViewBinding()
         observeViewModel()
     }
 }

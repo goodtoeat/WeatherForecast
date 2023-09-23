@@ -34,9 +34,9 @@ class MainViewModel @Inject constructor(
     private val showToastPrivate = MutableLiveData<SingleEvent<Any>>()
     val showToast: LiveData<SingleEvent<Any>> get() = showToastPrivate
 
-    open fun getWeatherRawData(){
+    open fun getWeatherData(){
         viewModelScope.launch {
-            dataRepository.requestCurrentWeather(WeatherRequest(latitude = 44.34, longitude = 10.99)).collect {
+            dataRepository.requestCurrentWeather(WeatherRequest(latitude = 25.02657, longitude = 121.41254)).collect {
                 weatherDataPrivate.value = it
             }
         }

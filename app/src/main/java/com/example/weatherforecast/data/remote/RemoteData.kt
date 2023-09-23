@@ -20,7 +20,7 @@ constructor(private val serviceGenerator: ServiceGenerator, private val networkC
         val dataService = serviceGenerator.createService(APIService::class.java)
         return when (val response = processCall {
             dataService.getCurrentWeather(
-                request.latitude, request.longitude, request.apiKey) }) {
+                request.latitude, request.longitude, request.units, request.lang, request.apiKey) }) {
             is WeatherData -> {
                 Resource.Success(data = response)
             }
