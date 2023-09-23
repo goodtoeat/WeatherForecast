@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.lifecycle.LiveData
 import com.example.weatherforecast.data.Resource
-import com.example.weatherforecast.dto.WeatherData
+import com.example.weatherforecast.dto.WeatherCurrently
 import com.example.weatherforecast.ui.base.BaseActivity
 import com.example.weatherforecast.utils.SingleEvent
 import com.example.weatherforecast.utils.observe
@@ -22,20 +22,21 @@ class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            WeatherTheme{
+            WeatherTheme(){
                 MainScreen()
             }
         }
-        viewModel.getWeatherData()
+        viewModel.getCurrentlyData()
+        viewModel.getForecastData()
     }
 
     override fun observeViewModel() {
-        observe(viewModel.weatherData, ::refreshView)
+        observe(viewModel.currentlyData, ::refreshView)
         observeToast(viewModel.showToast)
         observeSnackBarMessages(viewModel.showSnackBar)
     }
 
-    private fun refreshView(states: Resource<WeatherData>){
+    private fun refreshView(states: Resource<WeatherCurrently>){
         when (states){
             is Resource.Success -> {
 

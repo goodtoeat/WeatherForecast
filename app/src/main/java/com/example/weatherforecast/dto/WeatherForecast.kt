@@ -1,28 +1,42 @@
-package com.example.weatherforecast.dto
+data class WeatherForecast(
+    val city: City,
+    val cnt: Int,
+    val cod: String,
+    val list: List<Forecast>,
+    val message: Int
+)
 
-data class WeatherData(
-    val base: String,
-    val clouds: Clouds,
-    val cod: Int,
+data class City(
     val coord: Coord,
-    val dt: Int,
+    val country: String,
     val id: Int,
-    val main: Main,
     val name: String,
+    val population: Int,
+    val sunrise: Int,
+    val sunset: Int,
+    val timezone: Int
+)
+
+data class Forecast(
+    val clouds: Clouds,
+    val dt: Int,
+    val dt_txt: String,
+    val main: Main,
+    val pop: Double,
+    val rain: Rain,
     val sys: Sys,
-    val timezone: Int,
     val visibility: Int,
     val weather: List<Weather>,
     val wind: Wind
 )
 
-data class Clouds(
-    val all: Int
-)
-
 data class Coord(
     val lat: Double,
     val lon: Double
+)
+
+data class Clouds(
+    val all: Int
 )
 
 data class Main(
@@ -32,16 +46,17 @@ data class Main(
     val pressure: Int,
     val sea_level: Int,
     val temp: Double,
+    val temp_kf: Double,
     val temp_max: Double,
     val temp_min: Double
 )
 
+data class Rain(
+    val `3h`: Double
+)
+
 data class Sys(
-    val country: String,
-    val id: Int,
-    val sunrise: Int,
-    val sunset: Int,
-    val type: Int
+    val pod: String
 )
 
 data class Weather(
