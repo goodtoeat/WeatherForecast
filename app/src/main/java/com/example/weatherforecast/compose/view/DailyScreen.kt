@@ -90,7 +90,7 @@ fun DailyItem(forecast: Forecast){
 
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
-                .data(String.format(IMG_URL, forecast.weather?.get(0)?.icon))
+                .data(String.format(IMG_URL, forecast.weather[0].icon))
                 .crossfade(true)
                 .build(),
             contentDescription = null,

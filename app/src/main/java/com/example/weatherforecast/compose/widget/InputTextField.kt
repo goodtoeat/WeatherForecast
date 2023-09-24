@@ -1,7 +1,6 @@
-package com.example.weatherforecast.compose.view
+package com.example.weatherforecast.compose.widget
 
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -9,11 +8,13 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
@@ -22,24 +23,27 @@ import com.example.weatherforecast.compose.theme.*
 import com.example.weatherforecast.ui.compoment.main.MainViewModel
 
 @Composable
-fun input(text: MutableState<String>, hint: String, _enable: Boolean = true, _isError: Boolean = false, viewModel: MainViewModel = hiltViewModel()){
+fun input(hint: String, _enable: Boolean = true, _isError: Boolean = false, viewModel: MainViewModel = hiltViewModel()){
     var isFocus by remember { mutableStateOf(false)}
     var enable by remember { mutableStateOf(_enable)}
     var isError by remember { mutableStateOf(_isError)}
     var passwordVisibility: Boolean by remember { mutableStateOf(true) }
-
+    val text = viewModel.cityTextForSearch.observeAsState()
     var backgroundColor = TransparentGrayQuarternary
-    if (text.value!="") backgroundColor = Color.Transparent
+    if (viewModel.cityTextForSearch.value!="") backgroundColor = Color.Transparent
     if (!enable) backgroundColor = TransparentGrayTertiary
     val keyboardController = LocalSoftwareKeyboardController.current
+    val focusRequester = remember { FocusRequester() }
 
     OutlinedTextField(
         modifier = Modifier
             .fillMaxWidth()
+            .focusRequester(focusRequester) // 分配 FocusRequester
             .onFocusChanged { isFocus = it.isFocused },
+
         shape =  RoundedCornerShape(12.dp),
         textStyle = MaterialTheme.typography.h3,
-        value = text.value,
+        value = text.value!!,
         colors = TextFieldDefaults.outlinedTextFieldColors(
             textColor = TextActive,
             backgroundColor = backgroundColor,
@@ -54,14 +58,15 @@ fun input(text: MutableState<String>, hint: String, _enable: Boolean = true, _is
             errorLabelColor = Negative,
 
         ),
-        onValueChange = { text.value = it },
+        onValueChange = {
+            viewModel.setSearchText(it) },
         label = { Text(text = hint, style = MaterialTheme.typography.h4)},
         singleLine = true,
         enabled = enable,
         isError = isError,
         visualTransformation = if (passwordVisibility) VisualTransformation.None else PasswordVisualTransformation(),
         trailingIcon = {
-            IconButton(onClick = { viewModel.getDirectGeo(text.value) }) {
+            IconButton(onClick = { viewModel.getDirectGeo(text.value!!) }) {
                 Icon(
                     modifier = Modifier.size(40.dp),
                     imageVector = Icons.Default.Search,
@@ -74,8 +79,15 @@ fun input(text: MutableState<String>, hint: String, _enable: Boolean = true, _is
             onDone = {
                 // 处理回车键被按下时的操作
                 keyboardController?.hide() // 隐藏键盘
-                viewModel.getDirectGeo(text.value)
+                viewModel.getDirectGeo(text.value!!)
             }
         ),
     )
+
+    // 请求焦点并打开键盘
+    DisposableEffect(Unit) {
+        focusRequester.requestFocus()
+        keyboardController?.show()
+        onDispose { }
+    }
 }

@@ -23,6 +23,8 @@ val TransparentGrayQuarternary = Color(0x26787880)
 val TransparentGrayTable = Color(0x14787880)
 val TransparentGrayDividers = Color(0x99787880)
 val TransparentGrayDark = Color(0xFF505050)
+val TransparentDark = Color(0x8C000000)
+
 
 val SolidGray600 = Color(0xFF99999E)
 val SolidGray500 = Color(0xFF71726D)

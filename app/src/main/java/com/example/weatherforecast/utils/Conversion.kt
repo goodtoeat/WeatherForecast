@@ -4,14 +4,6 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
-fun convertFahrenheitToCelsius(fahrenheit: Double?): String{
-    fahrenheit?.let {
-        val celsius =  (fahrenheit - 32)*5/9
-        return  String.format("%.1f", celsius)
-    }
-    return "0"
-}
-
 fun removeFloat(temp: Double?): String{
     return String.format("%.0f", temp)
 }

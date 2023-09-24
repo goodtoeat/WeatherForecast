@@ -1,8 +1,10 @@
 package com.example.weatherforecast.compose.view
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
@@ -15,6 +17,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.weatherforecast.compose.theme.TransparentDark
+import com.example.weatherforecast.compose.widget.input
 import com.example.weatherforecast.dto.DirectGeoItem
 import com.example.weatherforecast.ui.compoment.main.MainViewModel
 
@@ -30,18 +34,23 @@ fun SearchDialog(viewModel: MainViewModel = hiltViewModel()) {
                 viewModel.switchSearchDialog()
             },
             content = {
-                Box(modifier = Modifier.fillMaxSize()){
+                Box(modifier = Modifier.fillMaxSize().background(color = TransparentDark, shape = RoundedCornerShape(16.dp)).padding(horizontal = 16.dp)){
                     Column {
                         Spacer(modifier = Modifier.height(10.dp))
-                        input(viewModel.cityTextForSearch,"輸入城市")
+                        input("輸入城市")
+                        Spacer(modifier = Modifier.height(10.dp))
                         LazyColumn{
                             directGeo.value?.let {
-                                items(directGeo.value!!){
-                                    SearchItem(it)
+                                if (directGeo.value!!.isEmpty()) {
+                                    item {
+                                        EmptyItem()
+                                    }
+                                } else {
+                                    items(directGeo.value!!) {
+                                        SearchItem(it)
+                                    }
                                 }
-
                             }
-
                         }
                     }
                 }
@@ -64,12 +73,26 @@ fun SearchItem(directGeoItem: DirectGeoItem, viewModel: MainViewModel = hiltView
         Text(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 8.dp, bottom = 8.dp, start = 24.dp, end = 24.dp),
+                .padding(top = 8.dp, bottom = 8.dp, start = 8.dp, end = 8.dp),
             textAlign = TextAlign.Left,
-            text = "${directGeoItem.local_names.zh?:directGeoItem.name} ${directGeoItem.state?:""}",
+            text = "${directGeoItem.local_names?.zh?:directGeoItem.name} ${directGeoItem.state?:""}",
             style = MaterialTheme.typography.h5,
             color = MaterialTheme.colors.secondary,
         )
     }
-
 }
+
+@Composable
+fun EmptyItem(){
+    Text(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 8.dp, bottom = 8.dp, start = 16.dp, end = 16.dp),
+        textAlign = TextAlign.Left,
+        text = "沒有對應的搜尋結果",
+        style = MaterialTheme.typography.h5,
+        color = MaterialTheme.colors.secondary,
+    )
+}
+
+

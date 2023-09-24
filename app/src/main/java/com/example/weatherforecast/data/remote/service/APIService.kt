@@ -2,7 +2,6 @@ package com.example.weatherforecast.data.remote.service
 
 import WeatherForecast
 import com.example.weatherforecast.dto.DirectGeo
-import com.example.weatherforecast.dto.DirectGeoItem
 import com.example.weatherforecast.dto.ReverseGeocoding
 import com.example.weatherforecast.dto.WeatherCurrently
 import retrofit2.Response

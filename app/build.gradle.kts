@@ -68,7 +68,6 @@ dependencies {
     implementation("androidx.fragment:fragment-ktx:1.6.1")
     implementation("com.squareup.picasso:picasso:2.8")
     implementation("androidx.test.espresso:espresso-idling-resource:3.5.1")
-    implementation("com.google.accompanist:accompanist-systemuicontroller:0.33.1-alpha")
     implementation("com.google.android.gms:play-services-location:21.0.1")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
@@ -99,6 +98,8 @@ dependencies {
     implementation("androidx.compose.ui:ui-tooling")
     implementation("androidx.activity:activity-compose")
     implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
+    implementation("com.google.accompanist:accompanist-systemuicontroller:0.33.1-alpha")
+    implementation("com.google.accompanist:accompanist-insets:0.31.5-beta")
 
     //Compose show image
     implementation("io.coil-kt:coil-compose:2.4.0")

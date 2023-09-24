@@ -3,20 +3,17 @@ package com.example.weatherforecast.ui.compoment.main
 import Forecast
 import WeatherForecast
 import androidx.annotation.VisibleForTesting
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.weatherforecast.data.DataRepositorySource
 import com.example.weatherforecast.data.Resource
-import com.example.weatherforecast.dto.DirectGeo
 import com.example.weatherforecast.dto.DirectGeoItem
 import com.example.weatherforecast.dto.GeoRequest
 import com.example.weatherforecast.dto.WeatherCurrently
 import com.example.weatherforecast.dto.LocationRequest
 import com.example.weatherforecast.dto.ReverseGeocoding
 import com.example.weatherforecast.ui.base.BaseViewModel
-import com.example.weatherforecast.utils.SingleEvent
 import com.example.weatherforecast.utils.getHour
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -46,22 +43,22 @@ class MainViewModel @Inject constructor(
 
     val openSearchDialog: LiveData<Boolean> = openSearchDialogPrivate
 
-    var cityTextForSearch = mutableStateOf("")
+    private val cityTextForSearchPrivate = MutableLiveData("")
+    val cityTextForSearch : LiveData<String> = cityTextForSearchPrivate
 
     /**
      * Error handling as UI
      */
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    private val showSnackBarPrivate = MutableLiveData<SingleEvent<Any>>()
-    val showSnackBar: LiveData<SingleEvent<Any>> get() = showSnackBarPrivate
+    private val showSnackBarPrivate = MutableLiveData("")
+    val showSnackBar: LiveData<String> get() = showSnackBarPrivate
 
-    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    private val showToastPrivate = MutableLiveData<SingleEvent<Any>>()
-    val showToast: LiveData<SingleEvent<Any>> get() = showToastPrivate
     fun getCurrentlyData(latitude:Double = 25.034645232960177, longitude:Double = 121.56117851104277){
         viewModelScope.launch {
             dataRepository.requestCurrentWeather(LocationRequest(latitude = latitude, longitude = longitude)).collect {
-                currentlyDataPrivate.value = it
+                processData(it) {
+                    currentlyDataPrivate.value = it
+                }
             }
         }
     }
@@ -69,8 +66,10 @@ class MainViewModel @Inject constructor(
     fun getForecastData(latitude:Double = 25.034645232960177, longitude:Double = 121.56117851104277){
         viewModelScope.launch {
             dataRepository.requestForecastWeather(LocationRequest(latitude = latitude, longitude = longitude)).collect {
-                get24Hour(it.data!!)
-                get5Day(it.data!!)
+                processData(it) {
+                    get24Hour(it.data!!)
+                    get5Day(it.data)
+                }
             }
         }
     }
@@ -78,7 +77,9 @@ class MainViewModel @Inject constructor(
     fun getReverseGeocoding(latitude:Double = 25.034645232960177, longitude:Double = 121.56117851104277){
         viewModelScope.launch {
             dataRepository.requestReverseGeocoding(LocationRequest(latitude = latitude, longitude = longitude)).collect {
-                reverseGeocodingPrivate.value = it.data!!
+                processData(it) {
+                    reverseGeocodingPrivate.value = it.data!!
+                }
             }
         }
     }
@@ -86,7 +87,9 @@ class MainViewModel @Inject constructor(
     fun getDirectGeo(query: String){
         viewModelScope.launch {
             dataRepository.requestDirectGeo(GeoRequest(query = query)).collect {
-                directGeoPrivate.value = it.data!!
+                processData(it) {
+                    directGeoPrivate.value = it.data!!
+                }
             }
         }
     }
@@ -102,7 +105,7 @@ class MainViewModel @Inject constructor(
 
     private fun get5Day(forecast: WeatherForecast){
         //取得GMT+8是11點的第一筆數據當作起始點, 用來查找每日11點的數據
-        val startIndex = forecast.list.filterIndexed { index, item ->
+        val startIndex = forecast.list.filterIndexed { _, item ->
             getHour(item.dt.toLong()) == 8
         }.map { forecast.list.indexOf(it) }.first()
         //每8組數據取第1組當代表, 免費api共可取得5筆
@@ -111,13 +114,25 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun showToastMessage(errorCode: Int) {
-        val error = errorManager.getError(errorCode)
-        showToastPrivate.value = SingleEvent(error.description)
+    fun setSearchText(text: String){
+        cityTextForSearchPrivate.value = text
     }
 
-    fun showSnackBarMessage(errorCode: Int) {
-        val error = errorManager.getError(errorCode)
-        showSnackBarPrivate.value = SingleEvent(error.description)
+    private fun processData(resource: Resource<*>, action: ()->Unit){
+        when (resource){
+            is Resource.Success -> {
+                action.invoke()
+            }
+            is Resource.DataError -> {
+                val error = errorManager.getError(resource.errorCode!!)
+                showSnackBarPrivate.value = String.format(error.description, resource.errorCode)
+            }
+            is Resource.Loading -> {}
+        }
     }
+
+    fun closeSnackBar(){
+        showSnackBarPrivate.value = ""
+    }
+
 }
