@@ -1,6 +1,8 @@
 package com.example.weatherforecast.data.remote.service
 
 import WeatherForecast
+import com.example.weatherforecast.dto.DirectGeo
+import com.example.weatherforecast.dto.DirectGeoItem
 import com.example.weatherforecast.dto.ReverseGeocoding
 import com.example.weatherforecast.dto.WeatherCurrently
 import retrofit2.Response
@@ -32,4 +34,11 @@ interface APIService {
         @Query("lon") longitude: Double,
         @Query("appid") apiKey: String?
     ): Response<ReverseGeocoding>
+
+    @GET("geo/1.0/direct")//呼叫5天/3小時預報數據
+    suspend fun getDirectGeo(
+        @Query("q") query: String,
+        @Query("limit") limit: Int,
+        @Query("appid") apiKey: String?
+    ): Response<DirectGeo>
 }

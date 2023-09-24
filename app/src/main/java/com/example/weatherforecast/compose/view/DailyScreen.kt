@@ -44,7 +44,8 @@ fun DailyScreen(viewModel: MainViewModel = hiltViewModel()) {
             .background(
                 shape = RoundedCornerShape(16.dp),
                 color = MaterialTheme.colors.surface.copy(alpha = 0.2f) // 背景颜色半透明
-            ).padding(start = 16.dp, end = 16.dp)
+            )
+            .padding(start = 16.dp, end = 16.dp)
     ) {
         LazyColumn(
             modifier = Modifier.fillMaxWidth(),
@@ -67,6 +68,9 @@ fun DailyItem(forecast: Forecast){
             Text(text = getDate(forecast.dt.toLong()),
                 style = MaterialTheme.typography.body2,
                 color = TransparentGrayDark)
+            Spacer(
+                modifier = Modifier.height(3.dp),
+            )
             Text(text = getWeek(forecast.dt.toLong()),
                 style = MaterialTheme.typography.body2,
                 color = TransparentGrayDark)
@@ -96,15 +100,15 @@ fun DailyItem(forecast: Forecast){
         Text(
             modifier = Modifier.weight(1f),
             text = forecast.weather[0].description,
-            style = MaterialTheme.typography.body2.copy(fontSize = 15.sp),
+            style = MaterialTheme.typography.body2.copy(fontSize = 14.sp),
             color = TransparentGrayDark,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Start
         )
 
 
 
         Text(text = "${removeFloat(forecast.main.temp_min)}°C - ${removeFloat(forecast.main.temp_max)}°C",
-            style = MaterialTheme.typography.body2.copy(fontWeight = FontWeight.W500),
+            style = MaterialTheme.typography.body2,
             color = TransparentGrayDark,
         )
     }

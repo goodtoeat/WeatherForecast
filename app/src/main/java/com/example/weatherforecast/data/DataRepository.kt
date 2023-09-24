@@ -2,6 +2,8 @@ package com.example.weatherforecast.data
 
 import WeatherForecast
 import com.example.weatherforecast.data.remote.RemoteData
+import com.example.weatherforecast.dto.DirectGeo
+import com.example.weatherforecast.dto.GeoRequest
 import com.example.weatherforecast.dto.WeatherCurrently
 import com.example.weatherforecast.dto.LocationRequest
 import com.example.weatherforecast.dto.ReverseGeocoding
@@ -29,6 +31,12 @@ class DataRepository @Inject constructor(private val remoteRepository: RemoteDat
     override suspend fun requestReverseGeocoding(request: LocationRequest): Flow<Resource<ReverseGeocoding>> {
         return flow {
             emit(remoteRepository.requestReverseGeocoding(request))
+        }.flowOn(ioDispatcher)
+    }
+
+    override suspend fun requestDirectGeo(request: GeoRequest): Flow<Resource<DirectGeo>> {
+        return flow {
+            emit(remoteRepository.requestDirectGeo(request))
         }.flowOn(ioDispatcher)
     }
 }

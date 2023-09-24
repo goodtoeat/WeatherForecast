@@ -29,7 +29,7 @@ fun get12Hour(timestamp: Long): String{
 fun getDate(timestamp: Long): String{
     val calendar = Calendar.getInstance()
     calendar.timeInMillis = timestamp * 1000 // 将秒转换为毫秒
-    val dateFormat = SimpleDateFormat("MM月dd日", Locale.getDefault())
+    val dateFormat = SimpleDateFormat("MM / dd", Locale.getDefault())
     return dateFormat.format(calendar.time)
 }
 

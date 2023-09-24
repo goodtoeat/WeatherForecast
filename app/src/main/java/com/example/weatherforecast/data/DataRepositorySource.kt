@@ -1,6 +1,8 @@
 package com.example.weatherforecast.data
 
 import WeatherForecast
+import com.example.weatherforecast.dto.DirectGeo
+import com.example.weatherforecast.dto.GeoRequest
 import com.example.weatherforecast.dto.WeatherCurrently
 import com.example.weatherforecast.dto.LocationRequest
 import com.example.weatherforecast.dto.ReverseGeocoding
@@ -10,5 +12,6 @@ interface DataRepositorySource {
     suspend fun requestCurrentWeather(request: LocationRequest): Flow<Resource<WeatherCurrently>>
     suspend fun requestForecastWeather(request: LocationRequest): Flow<Resource<WeatherForecast>>
     suspend fun requestReverseGeocoding(request: LocationRequest): Flow<Resource<ReverseGeocoding>>
+    suspend fun requestDirectGeo(request: GeoRequest): Flow<Resource<DirectGeo>>
 
 }

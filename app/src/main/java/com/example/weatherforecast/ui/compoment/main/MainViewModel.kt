@@ -3,11 +3,15 @@ package com.example.weatherforecast.ui.compoment.main
 import Forecast
 import WeatherForecast
 import androidx.annotation.VisibleForTesting
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.weatherforecast.data.DataRepositorySource
 import com.example.weatherforecast.data.Resource
+import com.example.weatherforecast.dto.DirectGeo
+import com.example.weatherforecast.dto.DirectGeoItem
+import com.example.weatherforecast.dto.GeoRequest
 import com.example.weatherforecast.dto.WeatherCurrently
 import com.example.weatherforecast.dto.LocationRequest
 import com.example.weatherforecast.dto.ReverseGeocoding
@@ -35,6 +39,14 @@ class MainViewModel @Inject constructor(
     private val reverseGeocodingPrivate = MutableLiveData<ReverseGeocoding>()
     val reverseGeocoding: LiveData<ReverseGeocoding> get() = reverseGeocodingPrivate
 
+    private val directGeoPrivate = MutableLiveData<List<DirectGeoItem>>()
+    val directGeo: LiveData<List<DirectGeoItem>> get() = directGeoPrivate
+
+    private val openSearchDialogPrivate = MutableLiveData(false)
+
+    val openSearchDialog: LiveData<Boolean> = openSearchDialogPrivate
+
+    var cityTextForSearch = mutableStateOf("")
 
     /**
      * Error handling as UI
@@ -69,6 +81,18 @@ class MainViewModel @Inject constructor(
                 reverseGeocodingPrivate.value = it.data!!
             }
         }
+    }
+
+    fun getDirectGeo(query: String){
+        viewModelScope.launch {
+            dataRepository.requestDirectGeo(GeoRequest(query = query)).collect {
+                directGeoPrivate.value = it.data!!
+            }
+        }
+    }
+
+    fun switchSearchDialog(){
+        openSearchDialogPrivate.value = openSearchDialogPrivate.value == false
     }
 
     private fun get24Hour(forecast: WeatherForecast){

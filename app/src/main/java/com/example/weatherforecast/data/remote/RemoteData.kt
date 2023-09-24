@@ -3,6 +3,8 @@ package com.example.weatherforecast.data.remote
 import WeatherForecast
 import com.example.weatherforecast.data.Resource
 import com.example.weatherforecast.data.remote.service.APIService
+import com.example.weatherforecast.dto.DirectGeo
+import com.example.weatherforecast.dto.GeoRequest
 import com.example.weatherforecast.dto.WeatherCurrently
 import com.example.weatherforecast.dto.LocationRequest
 import com.example.weatherforecast.dto.ReverseGeocoding
@@ -22,7 +24,7 @@ constructor(private val serviceGenerator: ServiceGenerator, private val networkC
         val dataService = serviceGenerator.createService(APIService::class.java)
         return when (val response = processCall {
             dataService.getCurrentlyWeather(
-                request.latitude, request.longitude, request.units, request.lang, request.apiKey) }) {
+                latitude = request.latitude, longitude = request.longitude, unit = request.units, lang = request.lang, apiKey = request.apiKey) }) {
             is WeatherCurrently -> {
                 Resource.Success(data = response)
             }
@@ -36,7 +38,7 @@ constructor(private val serviceGenerator: ServiceGenerator, private val networkC
         val dataService = serviceGenerator.createService(APIService::class.java)
         return when (val response = processCall {
             dataService.getForecastWeather(
-                request.latitude, request.longitude, request.units, request.lang, request.apiKey) }) {
+                latitude = request.latitude, longitude = request.longitude, unit = request.units, lang = request.lang, apiKey = request.apiKey) }) {
             is WeatherForecast -> {
                 Resource.Success(data = response)
             }
@@ -50,8 +52,22 @@ constructor(private val serviceGenerator: ServiceGenerator, private val networkC
         val dataService = serviceGenerator.createService(APIService::class.java)
         return when (val response = processCall {
             dataService.getReverseGeocoding(
-                request.latitude, request.longitude, request.apiKey) }) {
+                latitude = request.latitude, longitude = request.longitude, apiKey = request.apiKey) }) {
             is ReverseGeocoding -> {
+                Resource.Success(data = response)
+            }
+            else -> {
+                Resource.DataError(errorCode = response as Int)
+            }
+        }
+    }
+
+    override suspend fun requestDirectGeo(request: GeoRequest): Resource<DirectGeo> {
+        val dataService = serviceGenerator.createService(APIService::class.java)
+        return when (val response = processCall {
+            dataService.getDirectGeo(
+                query = request.query, limit = request.limit, apiKey = request.apiKey) }) {
+            is DirectGeo -> {
                 Resource.Success(data = response)
             }
             else -> {

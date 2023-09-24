@@ -36,14 +36,14 @@ fun CurrentScreen(viewModel: MainViewModel = hiltViewModel()){
     Box(modifier = Modifier.fillMaxWidth()){
         Text(
             modifier = Modifier.align(Alignment.Center),
-            text = reverseGeocoding.value?.get(0)?.local_names?.zh ?: "",
+            text = reverseGeocoding.value?.get(0)?.local_names?.zh ?: "定位中...",
             style = MaterialTheme.typography.h3,
             color = MaterialTheme.colors.secondary
         )
 
         IconButton(
             modifier = Modifier.align(Alignment.CenterEnd),
-            onClick = { /*TODO*/ }) {
+            onClick = { viewModel.switchSearchDialog() }) {
             Icon(
                 modifier = Modifier.size(40.dp),
                 imageVector = Icons.Default.Search,
@@ -61,7 +61,7 @@ fun CurrentScreen(viewModel: MainViewModel = hiltViewModel()){
     ) {
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
-                .data("${String.format(IMG_URL, currentlyData.value?.data?.weather?.get(0)?.icon)}")
+                .data(String.format(IMG_URL, currentlyData.value?.data?.weather?.get(0)?.icon))
                 .crossfade(true)
                 .build(),
             contentDescription = null,
@@ -80,7 +80,7 @@ fun CurrentScreen(viewModel: MainViewModel = hiltViewModel()){
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(text = "${currentlyData.value?.data?.weather?.get(0)?.description}",
+        Text(text = currentlyData.value?.data?.weather?.get(0)?.description?:"氣候",
             modifier = Modifier.weight(1f),
             textAlign = TextAlign.Right,
             style = MaterialTheme.typography.h6,
