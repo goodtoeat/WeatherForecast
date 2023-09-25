@@ -19,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -26,6 +27,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.weatherforecast.IMG_URL
+import com.example.weatherforecast.R
 import com.example.weatherforecast.ui.compoment.main.MainViewModel
 import com.example.weatherforecast.utils.removeFloat
 
@@ -36,7 +38,7 @@ fun CurrentScreen(viewModel: MainViewModel = hiltViewModel()){
     Box(modifier = Modifier.fillMaxWidth()){
         Text(
             modifier = Modifier.align(Alignment.Center),
-            text = reverseGeocoding.value?.get(0)?.local_names?.zh ?: "定位中...",
+            text = reverseGeocoding.value?.get(0)?.local_names?.zh ?: stringResource(R.string.find_location_ing),
             style = MaterialTheme.typography.h3,
             color = MaterialTheme.colors.secondary
         )
@@ -80,7 +82,7 @@ fun CurrentScreen(viewModel: MainViewModel = hiltViewModel()){
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(text = currentlyData.value?.data?.weather?.get(0)?.description?:"氣候",
+        Text(text = currentlyData.value?.data?.weather?.get(0)?.description?: stringResource(R.string.weather),
             modifier = Modifier.weight(1f),
             textAlign = TextAlign.Right,
             style = MaterialTheme.typography.h6,
@@ -89,7 +91,10 @@ fun CurrentScreen(viewModel: MainViewModel = hiltViewModel()){
         Text(text = "  |  ",
             style = MaterialTheme.typography.h6,
             color = MaterialTheme.colors.secondary)
-        Text(text = "體感 ${removeFloat(currentlyData.value?.data?.main?.feels_like)}°C",
+        Text(text = stringResource(
+            R.string.feel_like,
+            removeFloat(currentlyData.value?.data?.main?.feels_like)
+        ),
             modifier = Modifier.weight(1f),
             style = MaterialTheme.typography.h6,
             color = MaterialTheme.colors.secondary
@@ -104,7 +109,11 @@ fun CurrentScreen(viewModel: MainViewModel = hiltViewModel()){
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(text = "風 ${removeFloat(currentlyData.value?.data?.wind?.speed)} 公里/小時",
+        Text(
+            text = stringResource(
+                R.string.wind_speed,
+                removeFloat(currentlyData.value?.data?.wind?.speed)
+            ),
             modifier = Modifier.weight(1f),
             textAlign = TextAlign.Right,
             style = MaterialTheme.typography.h6,

@@ -25,9 +25,9 @@ import com.example.weatherforecast.ui.compoment.main.MainViewModel
 @Composable
 fun input(hint: String, _enable: Boolean = true, _isError: Boolean = false, viewModel: MainViewModel = hiltViewModel()){
     var isFocus by remember { mutableStateOf(false)}
-    var enable by remember { mutableStateOf(_enable)}
-    var isError by remember { mutableStateOf(_isError)}
-    var passwordVisibility: Boolean by remember { mutableStateOf(true) }
+    val enable by remember { mutableStateOf(_enable)}
+    val isError by remember { mutableStateOf(_isError)}
+    val passwordVisibility: Boolean by remember { mutableStateOf(true) }
     val text = viewModel.cityTextForSearch.observeAsState()
     var backgroundColor = TransparentGrayQuarternary
     if (viewModel.cityTextForSearch.value!="") backgroundColor = Color.Transparent
@@ -77,14 +77,12 @@ fun input(hint: String, _enable: Boolean = true, _isError: Boolean = false, view
         },
         keyboardActions = KeyboardActions(
             onDone = {
-                // 处理回车键被按下时的操作
                 keyboardController?.hide() // 隐藏键盘
                 viewModel.getDirectGeo(text.value!!)
             }
         ),
     )
 
-    // 请求焦点并打开键盘
     DisposableEffect(Unit) {
         focusRequester.requestFocus()
         keyboardController?.show()

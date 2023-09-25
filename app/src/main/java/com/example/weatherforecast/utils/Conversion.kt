@@ -10,7 +10,7 @@ fun removeFloat(temp: Double?): String{
 
 fun get12Hour(timestamp: Long): String{
     val calendar = Calendar.getInstance()
-    calendar.timeInMillis = timestamp * 1000 // 将秒转换为毫秒
+    calendar.timeInMillis = timestamp * 1000
     val amPmFormat = SimpleDateFormat("a", Locale.getDefault())
     val hourFormat = SimpleDateFormat("hh", Locale.getDefault())
     val amPm = amPmFormat.format(calendar.time)
@@ -20,14 +20,14 @@ fun get12Hour(timestamp: Long): String{
 
 fun getDate(timestamp: Long): String{
     val calendar = Calendar.getInstance()
-    calendar.timeInMillis = timestamp * 1000 // 将秒转换为毫秒
+    calendar.timeInMillis = timestamp * 1000
     val dateFormat = SimpleDateFormat("MM / dd", Locale.getDefault())
     return dateFormat.format(calendar.time)
 }
 
 fun getWeek(timestamp: Long): String{
     val calendar = Calendar.getInstance()
-    calendar.timeInMillis = timestamp * 1000 // 将秒转换为毫秒
+    calendar.timeInMillis = timestamp * 1000
     val dateFormat = SimpleDateFormat("EEEE", Locale.getDefault())
     return dateFormat.format(calendar.time)
 }

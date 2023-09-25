@@ -13,10 +13,12 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.weatherforecast.R
 import com.example.weatherforecast.compose.theme.TransparentDark
 import com.example.weatherforecast.compose.widget.input
 import com.example.weatherforecast.dto.DirectGeoItem
@@ -34,7 +36,10 @@ fun SearchDialog(viewModel: MainViewModel = hiltViewModel()) {
                 viewModel.switchSearchDialog()
             },
             content = {
-                Box(modifier = Modifier.fillMaxSize().background(color = TransparentDark, shape = RoundedCornerShape(16.dp)).padding(horizontal = 16.dp)){
+                Box(modifier = Modifier
+                    .fillMaxSize()
+                    .background(color = TransparentDark, shape = RoundedCornerShape(16.dp))
+                    .padding(horizontal = 16.dp)){
                     Column {
                         Spacer(modifier = Modifier.height(10.dp))
                         input("輸入城市")
@@ -89,7 +94,7 @@ fun EmptyItem(){
             .fillMaxWidth()
             .padding(top = 8.dp, bottom = 8.dp, start = 16.dp, end = 16.dp),
         textAlign = TextAlign.Left,
-        text = "沒有對應的搜尋結果",
+        text = stringResource(R.string.no_result),
         style = MaterialTheme.typography.h5,
         color = MaterialTheme.colors.secondary,
     )

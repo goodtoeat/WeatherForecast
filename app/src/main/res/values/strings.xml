@@ -2,4 +2,9 @@
     <string name="app_name">WeatherForecast</string>
     <string name="no_internet">請檢查你的網路連線 (%1$s) </string>
     <string name="network_error">無法取得服務器資訊，請稍候再試 (%1$s) </string>
+    <string name="no_result">沒有對應的搜尋結果</string>
+    <string name="find_location_ing">定位中…</string>
+    <string name="wind_speed">風 %1$s 公里/小時</string>
+    <string name="feel_like">體感 %1$s°C</string>
+    <string name="weather">氣候</string>
 </resources>

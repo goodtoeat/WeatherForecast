@@ -21,7 +21,6 @@ fun BoxScope.CustomToast(
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
 
-    // 创建一个自定义Snackbar
     SnackbarHost(
         hostState = snackbarHostState,
         modifier = Modifier.align(Alignment.BottomCenter)
@@ -43,7 +42,6 @@ fun BoxScope.CustomToast(
         )
     }
 
-    // 显示Snackbar
     LaunchedEffect(message) {
         snackbarHostState.showSnackbar(
             message = message,
