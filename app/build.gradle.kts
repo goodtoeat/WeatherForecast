@@ -102,6 +102,8 @@ dependencies {
     implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
     implementation("com.google.accompanist:accompanist-systemuicontroller:0.33.1-alpha")
     implementation("com.google.accompanist:accompanist-insets:0.31.5-beta")
+    implementation("androidx.compose.ui:ui-graphics:1.5.1")
+
 
     //Compose show image
     implementation("io.coil-kt:coil-compose:2.4.0")
