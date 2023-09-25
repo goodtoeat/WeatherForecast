@@ -14,7 +14,9 @@ import com.example.weatherforecast.dto.WeatherCurrently
 import com.example.weatherforecast.dto.LocationRequest
 import com.example.weatherforecast.dto.ReverseGeocoding
 import com.example.weatherforecast.ui.base.BaseViewModel
+import com.example.weatherforecast.utils.getEveryDayForecast
 import com.example.weatherforecast.utils.getHour
+import com.example.weatherforecast.utils.getStartIndexOf5Day
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -24,25 +26,47 @@ class MainViewModel @Inject constructor(
     private val dataRepository: DataRepositorySource
 ): BaseViewModel() {
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+
+    /**
+     * 當前天氣
+     */
     private val currentlyDataPrivate = MutableLiveData<Resource<WeatherCurrently>>()
     val currentlyData: LiveData<Resource<WeatherCurrently>> get() = currentlyDataPrivate
 
+    /**
+     * 24小時天氣 from 5天3小時數據
+     */
     private val forecast24HPrivate = MutableLiveData<List<Forecast>>()
     val forecast24H: LiveData<List<Forecast>> get() = forecast24HPrivate
 
+    /**
+     * 5日天氣 from 5天3小時數據
+     */
     private val forecast5DayPrivate = MutableLiveData<List<Forecast>>()
     val forecast5Day: LiveData<List<Forecast>> get() = forecast5DayPrivate
 
+    /**
+     * 由經緯度取得的城市名稱
+     */
     private val reverseGeocodingPrivate = MutableLiveData<ReverseGeocoding>()
     val reverseGeocoding: LiveData<ReverseGeocoding> get() = reverseGeocodingPrivate
 
+    /**
+     * 由搜尋字串獲得的城市名稱集合
+     */
     private val directGeoPrivate = MutableLiveData<List<DirectGeoItem>>()
     val directGeo: LiveData<List<DirectGeoItem>> get() = directGeoPrivate
 
+    /**
+     * 判斷是否開啟搜尋功能
+     */
     private val openSearchDialogPrivate = MutableLiveData(false)
 
     val openSearchDialog: LiveData<Boolean> = openSearchDialogPrivate
 
+    /**
+     * 搜尋關鍵字
+     */
     private val cityTextForSearchPrivate = MutableLiveData("")
     val cityTextForSearch : LiveData<String> = cityTextForSearchPrivate
 
@@ -104,14 +128,10 @@ class MainViewModel @Inject constructor(
     }
 
     private fun get5Day(forecast: WeatherForecast){
-        //取得GMT+8是11點的第一筆數據當作起始點, 用來查找每日11點的數據
-        val startIndex = forecast.list.filterIndexed { _, item ->
-            getHour(item.dt.toLong()) == 8
-        }.map { forecast.list.indexOf(it) }.first()
+        //取得GMT+8是八點的第一筆數據當作起始點, 用來查找每日11點的數據
+        val startIndex = getStartIndexOf5Day(forecast)
         //每8組數據取第1組當代表, 免費api共可取得5筆
-        forecast5DayPrivate.value = forecast.list.filterIndexed { index, _ ->
-            index % 8 == startIndex
-        }
+        forecast5DayPrivate.value = getEveryDayForecast(forecast, startIndex)
     }
 
     fun setSearchText(text: String){
