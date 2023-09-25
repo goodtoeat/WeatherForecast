@@ -21,13 +21,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.weatherforecast.IMG_URL
+import com.example.weatherforecast.compose.theme.Guest
 import com.example.weatherforecast.compose.theme.TransparentGrayDark
 import com.example.weatherforecast.ui.compoment.main.MainViewModel
 import com.example.weatherforecast.utils.getDate
@@ -98,8 +101,8 @@ fun DailyItem(forecast: Forecast){
                     .align(Alignment.CenterEnd)
                     .offset(y = (-18).dp),
                 text = "${removeFloat(forecast.pop * 100)} %",
-                style = MaterialTheme.typography.caption,
-                color = TransparentGrayDark,
+                style = MaterialTheme.typography.caption.copy(fontWeight = FontWeight.W700),
+                color = Guest,
                 textAlign = TextAlign.End,
             )
         }
