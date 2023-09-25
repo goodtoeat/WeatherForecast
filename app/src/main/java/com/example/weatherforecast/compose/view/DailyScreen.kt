@@ -8,7 +8,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -22,7 +24,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
@@ -63,7 +64,9 @@ fun DailyScreen(viewModel: MainViewModel = hiltViewModel()) {
 @Composable
 fun DailyItem(forecast: Forecast){
     Row(verticalAlignment = Alignment.CenterVertically) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Column(
+            modifier = Modifier.width(width = 75.dp),
+            horizontalAlignment = Alignment.CenterHorizontally) {
             Text(text = getDate(forecast.dt.toLong()),
                 style = MaterialTheme.typography.body2,
                 color = TransparentGrayDark)
@@ -76,32 +79,41 @@ fun DailyItem(forecast: Forecast){
         }
 
         Spacer(
+            modifier = Modifier.width(10.dp),
+        )
+
+        Box(modifier = Modifier.size(75.dp)){
+
+            AsyncImage(
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(String.format(IMG_URL, forecast.weather[0].icon))
+                    .crossfade(true)
+                    .build(),
+                contentDescription = null,
+                modifier = Modifier.height(75.dp)
+            )
+
+            Text(
+                modifier = Modifier
+                    .align(Alignment.CenterEnd)
+                    .offset(y = (-18).dp),
+                text = "${removeFloat(forecast.pop * 100)} %",
+                style = MaterialTheme.typography.caption,
+                color = TransparentGrayDark,
+                textAlign = TextAlign.End,
+            )
+        }
+
+        Spacer(
             modifier = Modifier.width(20.dp),
-        )
-
-        Text(
-            modifier = Modifier.width(25.dp),
-            text = "${removeFloat(forecast.pop * 100)} %",
-            style = MaterialTheme.typography.caption,
-            color = TransparentGrayDark,
-            textAlign = TextAlign.End
-        )
-
-        AsyncImage(
-            model = ImageRequest.Builder(LocalContext.current)
-                .data(String.format(IMG_URL, forecast.weather[0].icon))
-                .crossfade(true)
-                .build(),
-            contentDescription = null,
-            modifier = Modifier.height(75.dp)
         )
 
         Text(
             modifier = Modifier.weight(1f),
             text = forecast.weather[0].description,
-            style = MaterialTheme.typography.body2.copy(fontSize = 14.sp),
+            style = MaterialTheme.typography.body2,
             color = TransparentGrayDark,
-            textAlign = TextAlign.Start
+            textAlign = TextAlign.Center
         )
 
 

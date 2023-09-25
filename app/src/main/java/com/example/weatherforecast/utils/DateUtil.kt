@@ -11,10 +11,10 @@ fun get12Hour(timestamp: Long): String{
     val calendar = Calendar.getInstance()
     calendar.timeInMillis = timestamp * 1000
     val amPmFormat = SimpleDateFormat("a", Locale.getDefault())
-    val hourFormat = SimpleDateFormat("hh", Locale.getDefault())
+    val hourFormat = SimpleDateFormat("hh:mm", Locale.getDefault())
     val amPm = amPmFormat.format(calendar.time)
     val hour = hourFormat.format(calendar.time)
-    return "${amPm}${hour}時"
+    return "${amPm}${hour}"
 }
 
 /**

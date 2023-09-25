@@ -15,7 +15,6 @@ import com.example.weatherforecast.dto.LocationRequest
 import com.example.weatherforecast.dto.ReverseGeocoding
 import com.example.weatherforecast.ui.base.BaseViewModel
 import com.example.weatherforecast.utils.getEveryDayForecast
-import com.example.weatherforecast.utils.getHour
 import com.example.weatherforecast.utils.getStartIndexOf5Day
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch

@@ -68,6 +68,10 @@ class MainActivity : BaseActivity() {
                     viewModel.getForecastData(latitude, longitude)
                     viewModel.getReverseGeocoding(latitude, longitude)
                 }
+            }.addOnFailureListener{
+                viewModel.getCurrentlyData()
+                viewModel.getForecastData()
+                viewModel.getReverseGeocoding()
             }
     }
 }
