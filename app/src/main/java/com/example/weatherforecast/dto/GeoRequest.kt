@@ -2,5 +2,5 @@ package com.example.weatherforecast.dto
 
 data class GeoRequest(val query: String = "",
                       val limit: Int = 5,
-                      val apiKey: String = "8a39776ce73bbd8bdc2d7955c1495572"
+                      val apiKey: String = "e254105efb3b91a4f1c5a2c0bd9dfe17"
 )
